@@ -1,5 +1,7 @@
 package service;
 
+import model.Transaction;
+
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
@@ -7,5 +9,5 @@ import javax.jws.WebService;
 public interface TransactionService {
 
     @WebMethod
-    String createTransaction();
+    Transaction createTransaction(Transaction transaction);
 }

@@ -71,6 +71,10 @@ public class AccountHolderServiceImpl implements AccountHolderService {
 
     @Override
     public boolean updateBalance(String id, double amount) {
-        return false;
+        Key key = new Key("test", "account_holder", id);
+        Record record = client.get(null, key, "balance");
+        Bin balance = new Bin("balance", amount + record.getDouble("balance"));
+        client.put(null, key, balance);
+        return true;
     }
 }
