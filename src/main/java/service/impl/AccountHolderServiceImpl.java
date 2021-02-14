@@ -9,6 +9,7 @@ import com.aerospike.client.query.Statement;
 import config.AeroSpikeConfig;
 import model.AccountHolder;
 import service.AccountHolderService;
+import utils.AccountHolderUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +30,7 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         while(records.next()) {
             Record current = records.getRecord();
 
-            AccountHolder accountHolder = new AccountHolder();
-            accountHolder.setId(current.getString("id"));
-            accountHolder.setFirstName(current.getString("firstName"));
-            accountHolder.setLastName(current.getString("lastName"));
-            accountHolder.setBalance(current.getDouble("balance"));
+            AccountHolder accountHolder = AccountHolderUtil.extractAccountHolder(current);
 
             list.add(accountHolder);
         }
@@ -45,11 +42,11 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         Key key = new Key("test", "account_holder", id);
         Record record = client.get(null, key);
 
-        AccountHolder accountHolder = new AccountHolder();
-        accountHolder.setId(record.getString("id"));
-        accountHolder.setFirstName(record.getString("firstName"));
-        accountHolder.setLastName(record.getString("lastName"));
-        accountHolder.setBalance(record.getDouble("balance"));
+        if(record == null) {
+            return null;
+        }
+
+        AccountHolder accountHolder = AccountHolderUtil.extractAccountHolder(record);
 
         return accountHolder;
 
@@ -75,6 +72,13 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         Record record = client.get(null, key, "balance");
         Bin balance = new Bin("balance", amount + record.getDouble("balance"));
         client.put(null, key, balance);
+        return true;
+    }
+
+    @Override
+    public boolean deleteAccountById(String id) {
+        Key key = new Key("test", "account_holder", id);
+        client.delete(null, key);
         return true;
     }
 }

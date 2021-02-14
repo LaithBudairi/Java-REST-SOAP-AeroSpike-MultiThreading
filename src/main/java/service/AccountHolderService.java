@@ -10,4 +10,5 @@ public interface AccountHolderService {
     AccountHolder getAccountHolder(String id);
     AccountHolder createNewAccount(AccountHolder accountHolder);
     boolean updateBalance(String id, double amount);
+    boolean deleteAccountById(String id);
 }

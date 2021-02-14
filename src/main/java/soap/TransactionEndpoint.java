@@ -1,4 +1,4 @@
-package service.impl;
+package soap;
 
 import com.aerospike.client.AerospikeClient;
 import com.aerospike.client.Bin;
@@ -7,11 +7,12 @@ import config.AeroSpikeConfig;
 import model.Transaction;
 import service.AccountHolderService;
 import service.TransactionService;
+import service.impl.AccountHolderServiceImpl;
 
 import javax.jws.WebService;
 
 @WebService(endpointInterface = "service.TransactionService")
-public class TransactionServiceImp implements TransactionService {
+public class TransactionEndpoint implements TransactionService {
 
     AccountHolderService accountHolderService = new AccountHolderServiceImpl();
     AerospikeClient client = AeroSpikeConfig.getAeroSpikeClient();
